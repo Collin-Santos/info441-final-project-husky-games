@@ -68,18 +68,39 @@ We want to create something that is real time and interactive for our users. As 
 - __GET__
   - /users
     - /signin
+      - Handle user authentication through Azure
     - /signout
+      - Delete the users current session and sign them out
     - /error
+      - Handle login and general server errors that may occur
     - /unauthorized
+      - Deny access to matchmaking if not logged into a UW Mircosoft account
   - /matchmake
     - /search
+      - Inform the server that the client is open to pair with an opponent
+      - Waits for the server to pair with opponent and send matchmaking info
+      - Opens WebSocket for play
+    - /cancel
+      - Quit matchmaking and remove client from server queue
+  - /game
+    - /state
+      - Get current game state for client
+    - /leave
+      - Foreits match and closes connection to server
+      - Returns to landing
   - /leaderboard
     - /history
+      - Returns past games as a JSON payload for logged user
     - /top
+      - Returns top 25 in terms of Wins
+      - Can specify ranges, i.e. 25-50
 - __POST__
   - /users
     - /changeDisplayName
+      - Change name for logged account to broadcast to other users
+      - Save and update on MongoDb
     - /clearHistory
+      - Resets game counters for logged account
 - __WebSocket__
   - On message
     - Register action
