@@ -24,7 +24,7 @@ We want to create something that is real time and interactive for our users. As 
 
 ## Architecture and Action Diagram
 
-![architecture diagram](diagrams\architecture-action-diagram.jpg)
+![architecture diagram](diagrams\architecture-action-diagram.jpg?raw=true)
 [Link](https://miro.com/app/board/o9J_ljp5vo8=/?invite_link_id=3707674303)
 
 - Client: 
