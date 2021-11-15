@@ -144,3 +144,6 @@ We want to create something that is real time and interactive for our users. As 
   - __Date__: Date
   - __Opponent__: UserId (Foreign Key)
   - __Winner__: UserId (Foreign Key)
+
+  Github bot test
+  
