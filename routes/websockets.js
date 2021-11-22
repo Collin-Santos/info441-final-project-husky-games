@@ -9,7 +9,6 @@ let games = {}; //Keys = GameIDs, Values = Game JSON objects
 let wsCounter = 1; //Counter to give each WS a unique ID
 
 router.ws('/newsocket', (ws, req) => {
-
     //Create and add a new player to q when WS opens
     let player = {
         id: wsCounter,
@@ -19,6 +18,21 @@ router.ws('/newsocket', (ws, req) => {
     wsCounter++;
     wsQueue.push(player);
     console.log('New Player Sucessfully Added to Queue: ' + player);
+
+    ws.on('message', function(msg) {
+        try{
+            console.log(msg);
+            const msgJSON = JSON.parse(msg);
+            if(msgJSON.action == "forfeit"){
+                // TO DO: end game for users
+            } else if(msgJSON.action == "makeMove"){
+                // TO DO: update gameState
+            }
+
+        }catch(error){
+            console.error("Websocket message recieve error: " + error);
+        }
+    });
 
     ws.on('close', function close() {
         if (player.gameID == '') {  
