@@ -5,6 +5,7 @@ import logger from 'morgan';
 
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
+import wsRouter from './routes/websockets.js';
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/websockets', wsRouter);
 app.use('/users', usersRouter);
 
 export default app;

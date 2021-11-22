@@ -7,6 +7,8 @@
 import app from '../app.js';
 import debugLib from 'debug';
 import http from 'http';
+import enableWs from 'express-ws';
+
 const debug = debugLib('express-starter:server');
 
 /**
@@ -89,3 +91,5 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+enableWs(app, server);
