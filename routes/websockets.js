@@ -25,8 +25,12 @@ router.ws('/newsocket', (ws, req) => {
             const msgJSON = JSON.parse(msg);
             if(msgJSON.action == "forfeit"){
                 // TO DO: end game for users
+                let game = games[player.gameID];
+                let opponent = (game.p1.id == player.id) ? game.p2 : game.p1;
+                
             } else if(msgJSON.action == "makeMove"){
                 // TO DO: update gameState
+               games[player.gameID].state = msgJSON.value;
             }
 
         }catch(error){

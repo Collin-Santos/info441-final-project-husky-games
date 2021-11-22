@@ -3,26 +3,20 @@ const portInfo = (window.location.port != 80 && window.location.port != 443 ? ":
 const socketUrl = socketProtocol + '//' + window.location.hostname + portInfo + '/websockets/newsocket';
 let webSocket = new WebSocket(socketUrl);
 
-// -----------------------------------------------------------------------
-// added code functions
-
 // makeMove function - updates gameState
 function makeMove(gameState, playerId, nextMoveIndex) {
     // send string to new clients
-
     // if valid move 
     if(validate(gameState, nextMoveIndex)) {
-        // update game state
-        updateGame(gameState, playerId, nextMoveIndex); // update game state
+        let updatedGame = updateGame(gameState, playerId, nextMoveIndex); // update game state
+        webSocket.send(JSON.stringify({
+            action: "makeMove",
+            value: updatedGame
+        }));
     } else {
         // otherwise rollback (same player picks again)
         rollback(gameState);
     }
-    webSocket.send(JSON.stringify({
-        action: "makeMove",
-        value: gameState,
-        playerTurn: playerId
-    }));
 }
 
 // forfeit function - ends game 
@@ -32,12 +26,9 @@ function forfeit() {
     // value: gameState
     webSocket.send(JSON.stringify({
         action: "forfeit",
-        value: ".........",
-        message: gameOver()
+        value: ""
     }));
 }
-
-// -----------------------------------------------------------------------
 
 // updateGame function 
 function updateGame(gameState, playerId, nextMoveIndex) {
@@ -65,10 +56,10 @@ function updateGame(gameState, playerId, nextMoveIndex) {
 // validate function
 function validate(gameState, nextMoveIndex){
     // if valid move return true
-    if(gameState.charAt(nextMoveIndex).equals(".")) {
+    if(document.getElementById(`tile_${nextMoveIndex}`)) {
         return true;
     } 
-    // otherwise return false
+    // otherwise return fals
     return false; 
 }
 
@@ -89,9 +80,6 @@ function gameOver() {
     let msg = "Game Over!";
     return msg; // return gameOver msg
 }
-
-// ------------------------------------
-// (NOT TOO SURE?)
 
 // rollback function - returns gameState and (same player picks again)
 function rollback(gameState) {
