@@ -25,12 +25,15 @@ function tictactoe(playerState, gameState) {
             valid: true,
             gameState: playerState,
             lastTurn: validation.token,
-            gameWon: false
+            gameWon: false,
+            tied: false
         }
         if (checkHorizontal(playerState, validation.token, validation.index) ||
             checkVertical(playerState, validation.token, validation.index) ||
             checkDiagonal(playerState, validation.token, validation.index)) {
             newGameState.gameWon = true
+        } else if (checkTie(playerState)) {
+            newGameState.tied = true
         }
         return newGameState
     } else {
@@ -42,11 +45,13 @@ function validateMove(playerState, gameState) {
     if (playerState.length != 9 || gameState.length != 9) {
         return({
             valid: false,
-            gameState: gameState
+            gameState: gameState,
+            gameWon: false,
+            tied: false
         })
     } else {
         let changeCount = 0
-        // let changeIndex = -1
+        let changeIndex = -1
         let changeToken = '.'
         for (let index = 0; index < 9; index++) {
             if (playerState.charAt(index) != gameState.charAt(index)) {
@@ -57,7 +62,9 @@ function validateMove(playerState, gameState) {
                 } else {
                     return({
                         valid: false,
-                        gameState: gameState
+                        gameState: gameState,
+                        gameWon: false,
+                        tied: false
                     })
                 }
             }
@@ -65,7 +72,9 @@ function validateMove(playerState, gameState) {
             if (changeCount > 1) {
                 return({
                     valid: false,
-                    gameState: gameState
+                    gameState: gameState,
+                    gameWon: false,
+                    tied: false
                 })
             }
         }
@@ -119,19 +128,33 @@ function checkSet(indexSet, playerState, token, index) {
     }
 }
 
+function checkTie(gameState) {
+    let isTie = true
+    for (let index = 0; index < gameState.length; index++) {
+        if(gameState.charAt(index) == '.') {
+            isTie = false
+        }
+    }
+    return isTie
+}
+
+// -----------------------------------------------------------------------
+// unit tests
+
 function runTests() {
 
     playTestOne()
     playTestTwo()
     playTestThree()
     playTestFour()
+    playTestFive()
 
     failTestOne()
     failTestTwo()
 
     // Play game: Horizontal win
     function playTestOne() {
-        console.log("playTestOne")
+        console.log("playTest : hori win")
         console.log(tictactoe('........x', '.........'))
         console.log(tictactoe('o.......x', '........x'))
         console.log(tictactoe('o......xx', 'o.......x'))
@@ -141,7 +164,7 @@ function runTests() {
 
     // Play game: Vertical win
     function playTestTwo() {
-        console.log("playTestTwo")
+        console.log("playTest : vert win")
         console.log(tictactoe('........x', '.........'))
         console.log(tictactoe('o.......x', '........x'))
         console.log(tictactoe('o....x..x', 'o....x..x'))
@@ -151,7 +174,7 @@ function runTests() {
 
     // Play game: Diagonal win
     function playTestThree() {
-        console.log("playTestThree")
+        console.log("playTest : diag win")
         console.log(tictactoe('......x..', '.........'))
         console.log(tictactoe('o.....x..', '......x..'))
         console.log(tictactoe('o...x.x..', 'o.....x..'))
@@ -161,7 +184,7 @@ function runTests() {
 
     // Play game: P2 wins
     function playTestFour() {
-        console.log("playTestFour")
+        console.log("playTest : p2 wins")
         console.log(tictactoe('........x', '.........'))
         console.log(tictactoe('o.......x', '........x'))
         console.log(tictactoe('o......xx', 'o.......x'))
@@ -184,5 +207,7 @@ function runTests() {
         console.log(tictactoe('......oox', '........x'))
     }
 }
+
+// -----------------------------------------------------------------------
 
 export default tictactoe
