@@ -1,7 +1,9 @@
 import express from 'express';
+import enableWs from 'express-ws';
+import tictactoe from './tictactoe.js';
+
 var router = express.Router();
 
-import enableWs from 'express-ws';
 enableWs(router);
 
 let wsQueue = []; //Matchmaking q
@@ -23,14 +25,52 @@ router.ws('/newsocket', (ws, req) => {
         try{
             console.log(msg);
             const msgJSON = JSON.parse(msg);
+
+            // TODO: Check for player turn
+    
             if(msgJSON.action == "forfeit"){
-                // TO DO: end game for users
-                let game = games[player.gameID];
-                let opponent = (game.p1.id == player.id) ? game.p2 : game.p1;
-                
+                // TODO: end game for users
             } else if(msgJSON.action == "makeMove"){
-                // TO DO: update gameState
-               games[player.gameID].state = msgJSON.value;
+                const currentGameState = games[player.gameID].state
+                const gameLogic = tictactoe(msgJSON.value, currentGameState)
+                if (gameLogic.valid) {
+                    if (gameLogic.tied) {
+                        // tie logic
+                        const payload = {
+                            action: "tied",
+                            value: gameLogic.gameState
+                        }
+                    } else if (!gameLogic.gameWon) {
+                        // Update gamestate
+                        const payload = {
+                            action: "update",
+                            value: gameLogic.gameState
+                        }
+                        games[player.gameID].state = gameLogic.gameState
+                        games[player.gameID].p1.socket.send(JSON.stringify(
+                            payload
+                        ))
+                        games[player.gameID].p2.socket.send(JSON.stringify(
+                            payload
+                        ))
+                    } else {
+                        // Game won, notify players and end game
+                        const payloadWin = {
+                            action: "win",
+                            value: gameLogic.gameState
+                        }
+                        const payloadLose = {
+                            action: "lose",
+                            value: gameLogic.gameState
+                        }
+                    }
+                } else {
+                    // Rollback and prompt reinput
+                    const payload = {
+                        action: "rollback",
+                        value: gameLogic.gameState
+                    }
+                }
             }
 
         }catch(error){
@@ -75,7 +115,8 @@ router.ws('/newsocket', (ws, req) => {
         let newGame = {
             p1: p1,
             p2: p2,
-            state: '.........'
+            state: '.........',
+            turn: p1.id
         };
         games[gameID] = newGame;
         console.log('New Game Sucessfully Created: ' + gameID);
