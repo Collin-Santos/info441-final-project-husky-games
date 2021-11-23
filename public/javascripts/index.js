@@ -1,20 +1,45 @@
- import sendMessage from './websockets';
+ import * as wsUtils from './websockets.js';
 
 // makeMove function - updates gameState
-function makeMove(gameState, playerId, nextMoveIndex) {
+function makeMove(nextMoveIndex) {
+    console.log("Attempting to make a move at index " + nextMoveIndex);
     // send string to new clients
     // if valid move 
-    if(validate(gameState, nextMoveIndex)) {
-        let updatedGame = updateGame(gameState, playerId, nextMoveIndex); // update game state
-        let payload = {
+    if (validate(nextMoveIndex)) {
+        //let updatedGame = updateGame(gameState, playerId, nextMoveIndex); // update game state
+        let updatedGame = getGameState(nextMoveIndex); // update game state
+        let action = {
             action: "makeMove",
             value: updatedGame
         };
-        sendMessage(payload);
+        wsUtils.sendMessage(action);
     } else {
         // otherwise rollback (same player picks again)
-        rollback(gameState);
+        console.log("Failed to move rolling back")
+        rollback('temp');
     }
+}
+
+//Return potential game state after given move
+function getGameState(nextMoveIndex) {
+    let newGameState = [];
+    for (let i = 0; i < 9; i++) {
+        const tile = document.getElementById(`tile_${i}`);
+        if (i == nextMoveIndex) {
+            newGameState.push('X');
+        } else if (tile.innerHTML == "") {
+            newGameState.push(".");
+        } else {
+            newGameState.push(tile.innerHTML);
+        }
+    }
+    return newGameState.join("");
+}
+
+//return true if move is valid, false otherwise
+function validate(nextMoveIndex) {
+    console.log(document.getElementById(`tile_${nextMoveIndex}`));
+    return document.getElementById(`tile_${nextMoveIndex}`).innerHTML == "";
 }
 
 // forfeit function - ends game 
@@ -22,43 +47,11 @@ function forfeit() {
     // send string to new clients
     // value should return the current gameState
     // value: gameState
-    webSocket.send(JSON.stringify({
+    let acton = {
         action: "forfeit",
         value: ""
-    }));
-}
-
-// updateGame function 
-function updateGame(gameState, playerId, nextMoveIndex) {
-    let updatedGameState = "";
-
-    // if valid move
-    if(validate(gameState, nextMoveIndex)) {
-
-        // update gameState
-        for(let i = 0; i < gameState.length(); i++) {
-            // if index is the one we are looking for
-            if(nextMoveIndex == i) {
-                // add player symbol (X or O) from player obj 
-                // ex.) -> player1 {id: 1, symbol: X} player2 {id: 2, symbol: O}
-                updatedGameState += playerId.symbol; 
-            }
-            // otherwise
-            updatedGameState += "" + gameState.charAt(i); // add previous char's 
-        }
-        gameState = updatedGameState; // set gameState to updated gameState
-        return gameState; // return gameState
-    }
-}
-
-// validate function
-function validate(gameState, nextMoveIndex){
-    // if valid move return true
-    if(document.getElementById(`tile_${nextMoveIndex}`)) {
-        return true;
-    } 
-    // otherwise return fals
-    return false; 
+    };
+    wsUtils.sendMessage(action);
 }
 
 // wonGame function 
@@ -81,5 +74,9 @@ function gameOver() {
 
 // rollback function - returns gameState and (same player picks again)
 function rollback(gameState) {
-    return gameStateString
+    return gameState;
 }
+
+//Set all functions to be globally scoped
+window.makeMove = makeMove;
+window.forfeit = forfeit;
