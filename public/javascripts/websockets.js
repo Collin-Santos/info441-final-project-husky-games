@@ -13,11 +13,14 @@ webSocket.onmessage = function(event) {
         updateGame(data.value);
     } else if (data.action == "tied") {
         // TODO: Handle ties
+        updateGame(data.value)
         alert("tie game")
     } else if (data.action == "win") {
+        updateGame(data.value)
         // TODO: Handle wins
         alert("win game")
     } else if (data.action == "lose") {
+        updateGame(data.value)
         // TODO: Handle loss
         alert("lose game")
     } else if (data.action == "rollback") {

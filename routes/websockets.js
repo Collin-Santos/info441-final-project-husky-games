@@ -89,7 +89,7 @@ router.ws('/newsocket', (ws, req) => {
                                 value: gameLogic.gameState
                             }
                             player.socket.send(JSON.stringify(payloadWin))
-                            player.opponent.send(JSON.stringify(payloadLose))
+                            player.opponent.socket.send(JSON.stringify(payloadLose))
                         }
                     } else {
                         // Rollback and prompt reinput
