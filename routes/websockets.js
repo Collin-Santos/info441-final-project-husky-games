@@ -15,7 +15,9 @@ router.ws('/newsocket', (ws, req) => {
     let player = {
         id: wsCounter,
         socket: ws,
-        gameID: ''
+        gameID: '',
+        token: '',
+        opponent: ws
     };
     wsCounter++;
     wsQueue.push(player);
@@ -25,54 +27,80 @@ router.ws('/newsocket', (ws, req) => {
         try{
             console.log(msg);
             const msgJSON = JSON.parse(msg);
-
-            // TODO: Check for player turn
     
-            if(msgJSON.action == "forfeit"){
+            if (msgJSON.action == "forfeit") {
                 // TODO: end game for users
-            } else if(msgJSON.action == "makeMove"){
-                const currentGameState = games[player.gameID].state
-                const gameLogic = tictactoe(msgJSON.value, currentGameState)
-                if (gameLogic.valid) {
-                    if (gameLogic.tied) {
-                        // tie logic
-                        const payload = {
-                            action: "tied",
-                            value: gameLogic.gameState
-                        }
-                    } else if (!gameLogic.gameWon) {
-                        // Update gamestate
-                        const payload = {
-                            action: "update",
-                            value: gameLogic.gameState
-                        }
-                        games[player.gameID].state = gameLogic.gameState
-                        games[player.gameID].p1.socket.send(JSON.stringify(
-                            payload
-                        ))
-                        games[player.gameID].p2.socket.send(JSON.stringify(
-                            payload
-                        ))
-                    } else {
-                        // Game won, notify players and end game
-                        const payloadWin = {
-                            action: "win",
-                            value: gameLogic.gameState
-                        }
-                        const payloadLose = {
-                            action: "lose",
-                            value: gameLogic.gameState
-                        }
-                    }
-                } else {
-                    // Rollback and prompt reinput
-                    const payload = {
+            } else if (msgJSON.action == "token") {
+                player.socket.send(JSON.stringify({
+                    action: "token",
+                    value: player.token
+                }))
+            } else if (msgJSON.action == "makeMove") {
+                // Check against game logic
+                if (games[player.gameID].turn != player.id) {
+                    // Check for turn
+                    player.socket.send(JSON.stringify({
                         action: "rollback",
-                        value: gameLogic.gameState
+                        value: games[player.gameID].state,
+                        message: "Not your turn"
+                    }))
+                } else {
+                    const currentGameState = games[player.gameID].state
+                    const gameLogic = tictactoe(msgJSON.value, currentGameState)
+
+                    if (gameLogic.valid) {
+                        if (gameLogic.tied) {
+                            // tie logic
+                            const payload = {
+                                action: "tied",
+                                value: gameLogic.gameState
+                            }
+                            games[player.gameID].p1.socket.send(JSON.stringify(
+                                payload
+                            ))
+                            games[player.gameID].p2.socket.send(JSON.stringify(
+                                payload
+                            ))
+                            // TODO: End game
+                        } else if (!gameLogic.gameWon) {
+                            // Update gamestate
+                            const payload = {
+                                action: "update",
+                                value: gameLogic.gameState
+                            }
+                            games[player.gameID].state = gameLogic.gameState
+                            // Send game state
+                            games[player.gameID].p1.socket.send(JSON.stringify(
+                                payload
+                            ))
+                            games[player.gameID].p2.socket.send(JSON.stringify(
+                                payload
+                            ))
+                            // Pass turn
+                            games[player.gameID].turn = player.opponent.id
+                        } else {
+                            // Game won, notify players and end game
+                            const payloadWin = {
+                                action: "win",
+                                value: gameLogic.gameState
+                            }
+                            const payloadLose = {
+                                action: "lose",
+                                value: gameLogic.gameState
+                            }
+                            player.socket.send(JSON.stringify(payloadWin))
+                            player.opponent.send(JSON.stringify(payloadLose))
+                        }
+                    } else {
+                        // Rollback and prompt reinput
+                        player.socket.send(JSON.stringify({
+                            action: "rollback",
+                            value: gameLogic.gameState,
+                            message: "Invalid move"
+                        }))
                     }
                 }
             }
-
         }catch(error){
             console.error("Websocket message recieve error: " + error);
         }
@@ -111,7 +139,11 @@ router.ws('/newsocket', (ws, req) => {
         const gameID = p1.id + '-' + p2.id;
 
         p1.gameID = gameID;
+        p1.opponent = p2;
+        p1.token = 'X'
         p2.gameID = gameID;
+        p2.opponent = p1;
+        p2.token = 'O'
         let newGame = {
             p1: p1,
             p2: p2,

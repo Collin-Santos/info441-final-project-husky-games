@@ -23,10 +23,11 @@ function makeMove(nextMoveIndex) {
 //Return potential game state after given move
 function getGameState(nextMoveIndex) {
     let newGameState = [];
+    let token = document.getElementById("myToken").innerHTML
     for (let i = 0; i < 9; i++) {
         const tile = document.getElementById(`tile_${i}`);
         if (i == nextMoveIndex) {
-            newGameState.push('X');
+            newGameState.push(token); // debug: was 'X'
         } else if (tile.innerHTML == "") {
             newGameState.push(".");
         } else {
@@ -42,12 +43,16 @@ function validate(nextMoveIndex) {
     return document.getElementById(`tile_${nextMoveIndex}`).innerHTML == "";
 }
 
+function updateToken() {
+    wsUtils.sendMessage({action: "token"})
+}
+
 // forfeit function - ends game 
 function forfeit() {
     // send string to new clients
     // value should return the current gameState
     // value: gameState
-    let acton = {
+    let action = {
         action: "forfeit",
         value: ""
     };
@@ -80,3 +85,4 @@ function rollback(gameState) {
 //Set all functions to be globally scoped
 window.makeMove = makeMove;
 window.forfeit = forfeit;
+window.updateToken = updateToken;
