@@ -152,6 +152,22 @@ router.ws('/newsocket', (ws, req) => {
         };
         games[gameID] = newGame;
         console.log('New Game Sucessfully Created: ' + gameID);
+        p1.socket.send(JSON.stringify({
+            action: "found",
+            value: {
+                token: p1.token,
+                id: p1.id,
+                opponent: p2.id
+            }
+        }))
+        p2.socket.send(JSON.stringify({
+            action: "found",
+            value: {
+                token: p2.token,
+                id: p2.id,
+                opponent: p1.id
+            }
+        }))
     }
     console.log("New Queue Length: " + wsQueue.length);
     //TODO: ADD HANDLER FOR WS MESSAGES -> JSON OBJECTS SENT FROM THE CLIENT

@@ -1,35 +1,46 @@
-const socketProtocol = (window.location.protocol === 'https:' ? 'wss:' : 'ws:');
-const portInfo = (window.location.port != 80 && window.location.port != 443 ? ":" + window.location.port  : '');
-const socketUrl = socketProtocol + '//' + window.location.hostname + portInfo + '/websockets/newsocket';
-let webSocket = new WebSocket(socketUrl);
+let webSocket = null
 
-//TODO: ADD CONDITIONAL STATEMENTS FOR THE DIFFERENT ACTIONS
-//I.E. "tied", "update", "win", "lose", "rollback", "token"
-webSocket.onmessage = function(event) {
-    console.log("Receieved Message: ");
-    let data = JSON.parse(event.data);
-    console.log(event.data);
-    if (data.action == "update") {
-        updateGame(data.value);
-    } else if (data.action == "tied") {
-        // TODO: Handle ties
-        updateGame(data.value)
-        alert("tie game")
-    } else if (data.action == "win") {
-        updateGame(data.value)
-        // TODO: Handle wins
-        alert("win game")
-    } else if (data.action == "lose") {
-        updateGame(data.value)
-        // TODO: Handle loss
-        alert("lose game")
-    } else if (data.action == "rollback") {
-        // TODO: Handle rollback
-        alert(`rolling back: ${data.message}`)
-    } else if (data.action == "token") {
-        updateToken(data.value)
-    } else {
-        console.log("Unknown action")
+function startMatchmaking() {
+    updateMatchSearching()
+    createWebsocket()
+}
+
+function createWebsocket() {
+    const socketProtocol = (window.location.protocol === 'https:' ? 'wss:' : 'ws:');
+    const portInfo = (window.location.port != 80 && window.location.port != 443 ? ":" + window.location.port  : '');
+    const socketUrl = socketProtocol + '//' + window.location.hostname + portInfo + '/websockets/newsocket';
+    webSocket = new WebSocket(socketUrl);
+
+    //TODO: ADD CONDITIONAL STATEMENTS FOR THE DIFFERENT ACTIONS
+    //I.E. "tied", "update", "win", "lose", "rollback", "token"
+    webSocket.onmessage = function(event) {
+        console.log("Receieved Message: ");
+        let data = JSON.parse(event.data);
+        console.log(event.data);
+        if (data.action == "update") {
+            updateGame(data.value);
+        } else if (data.action == "tied") {
+            // TODO: Handle ties
+            updateGame(data.value)
+            alert("tie game")
+        } else if (data.action == "win") {
+            updateGame(data.value)
+            // TODO: Handle wins
+            alert("win game")
+        } else if (data.action == "lose") {
+            updateGame(data.value)
+            // TODO: Handle loss
+            alert("lose game")
+        } else if (data.action == "rollback") {
+            // TODO: Handle rollback
+            alert(`rolling back: ${data.message}`)
+        } else if (data.action == "token") {
+            updateToken(data.value)
+        } else if (data.action == "found") {
+            foundGame(data.value)
+        } else {
+            console.log("Unknown action")
+        }
     }
 }
 
@@ -43,9 +54,25 @@ function updateGame(gameState) {
     return newGameState.join("");
 }
 
+function foundGame(gameInfo) {
+    let gameInfoDiv = document.getElementById('game-information')
+    gameInfoDiv.innerHTML = ''
+    gameInfoDiv.innerHTML = `
+    <h1>Found Game:</h1>
+    <p>My Name: Guest ${gameInfo.id}</p>
+    <p>My Opponent: Guest ${gameInfo.opponent}</p>
+    <p>My Token: ${gameInfo.token}</p>
+    <div style="display:none;" id="myToken"></div>
+    `
+    updateToken(gameInfo.token)
+    updateMatchFound()
+}
+
 function updateToken(token) {
     document.getElementById('myToken').innerHTML = token
 }
+
+window.startMatchmaking = startMatchmaking
 
 //Given a JSON object send a message to websocket middleware
 export function sendMessage(message) {

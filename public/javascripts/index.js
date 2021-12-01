@@ -1,5 +1,37 @@
  import * as wsUtils from './websockets.js';
 
+function updateMatchSearching() {
+    let gameContainer = document.getElementById('interaction-swap')
+    gameContainer.innerHTML = ''
+    gameContainer.innerHTML = 'searching...'
+}
+
+function updateMatchFound() {
+    let gameContainer = document.getElementById('interaction-swap')
+    gameContainer.innerHTML = ''
+    gameContainer.innerHTML = `
+    <div class="container">
+        <h1>Tic Tac Toe</h1>
+        <div class="game-frame">
+        <div id="tile_0" class="tile" onclick="makeMove(0)"></div>
+        <div id="tile_1" class="tile" onclick="makeMove(1)"></div>
+        <div id="tile_2" class="tile" onclick="makeMove(2)"></div>
+        <div id="tile_3" class="tile" onclick="makeMove(3)"></div>
+        <div id="tile_4" class="tile" onclick="makeMove(4)"></div>
+        <div id="tile_5" class="tile" onclick="makeMove(5)"></div>
+        <div id="tile_6" class="tile" onclick="makeMove(6)"></div>
+        <div id="tile_7" class="tile" onclick="makeMove(7)"></div>
+        <div id="tile_8" class="tile" onclick="makeMove(8)"></div>
+        </div>
+    </div>
+
+    <div>
+        <button id="forfeitBtn" onclick="forfeit()">Forfeit Game</button>
+        <button id="updateToken" onclick="updateToken()">Update Token</button>
+    </div>
+    `
+}
+
 // makeMove function - updates gameState
 function makeMove(nextMoveIndex) {
     console.log("Attempting to make a move at index " + nextMoveIndex);
@@ -83,6 +115,8 @@ function rollback(gameState) {
 }
 
 //Set all functions to be globally scoped
+window.updateMatchSearching = updateMatchSearching;
+window.updateMatchFound = updateMatchFound;
 window.makeMove = makeMove;
 window.forfeit = forfeit;
 window.updateToken = updateToken;

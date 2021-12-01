@@ -6,28 +6,12 @@
 </head>
 
 <body>
-  <div class="container">
-    <h1>Tic Tac Toe</h1>
-    <div class="game-frame">
-      <div id="tile_0" class="tile" onclick="makeMove(0)"></div>
-      <div id="tile_1" class="tile" onclick="makeMove(1)"></div>
-      <div id="tile_2" class="tile" onclick="makeMove(2)"></div>
-      <div id="tile_3" class="tile" onclick="makeMove(3)"></div>
-      <div id="tile_4" class="tile" onclick="makeMove(4)"></div>
-      <div id="tile_5" class="tile" onclick="makeMove(5)"></div>
-      <div id="tile_6" class="tile" onclick="makeMove(6)"></div>
-      <div id="tile_7" class="tile" onclick="makeMove(7)"></div>
-      <div id="tile_8" class="tile" onclick="makeMove(8)"></div>
-    </div>
+  <div id="game-information">
+    <h1>No Active Game</h1>
   </div>
-
-  <div>
-    <button id="forfeitBtn" onclick="forfeit()">Forfeit Game</button>
-    <button id="updateToken" onclick="updateToken()">Update Token</button>
+  <div id="interaction-swap">
+    <button onclick="startMatchmaking()">Find a Game</button>
   </div>
-
-  <p>My Token:</p>
-  <div id="myToken"></div>
 
   <script type="module" src="javascripts/websockets.js"></script>
   <script type="module" src="javascripts/index.js"></script>
