@@ -1,21 +1,12 @@
 # To Do List
 
-## Websocket - Server
-- Cleanup on game completion
-  - Close sockets
-  - Send notice of closure
-  - Remove gamestate from memory
-  - Remove websocket from memory
-- Client closure
-  - Remove websocket from memory
-  - Remove websocket from matchmaking queue (if exists)
-  - Dispatch foreit game logic to opponent
-  - Remove gamestate from memory (if exists)
+## Code Styling
+- if/else -> switch statement
+- clean websocket switch
 
 ## Websockt - Client
 - Cleanup on game completion
   - Win/loss/tie animation
-  - Dispatch close websocket commands
   - Remove alerts
   - Add research button
 

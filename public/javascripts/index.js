@@ -86,27 +86,9 @@ function forfeit() {
     // value: gameState
     let action = {
         action: "forfeit",
-        value: ""
+        value: ''
     };
     wsUtils.sendMessage(action);
-}
-
-// wonGame function 
-function wonGame() {
-    let msg = "You won the game!";
-    return msg; // return won msg
-}
-
-// lostGame function 
-function lostGame() {
-    let msg = "You lost the game.";
-    return msg; // return lost msg
-}
-
-// gameOver function
-function gameOver() {
-    let msg = "Game Over!";
-    return msg; // return gameOver msg
 }
 
 // rollback function - returns gameState and (same player picks again)

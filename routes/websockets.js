@@ -16,20 +16,27 @@ router.ws('/newsocket', (ws, req) => {
         id: wsCounter,
         socket: ws,
         gameID: '',
-        token: '',
-        opponent: ws
+        token: ''
     };
     wsCounter++;
     wsQueue.push(player);
     console.log('New Player Sucessfully Added to Queue: ' + player);
 
     ws.on('message', function(msg) {
-        try{
+        try {
             console.log(msg);
             const msgJSON = JSON.parse(msg);
-    
             if (msgJSON.action == "forfeit") {
-                // TODO: end game for users
+                const payloadWin = {
+                    action: "win",
+                    value: games[player.gameID].state 
+                }
+                const payloadLose = {
+                    action: "lose",
+                    value: games[player.gameID].state 
+                }
+                player.socket.send(JSON.stringify(payloadLose))
+                player.opponent.socket.send(JSON.stringify(payloadWin))
             } else if (msgJSON.action == "token") {
                 player.socket.send(JSON.stringify({
                     action: "token",
@@ -101,7 +108,7 @@ router.ws('/newsocket', (ws, req) => {
                     }
                 }
             }
-        }catch(error){
+        } catch(error) {
             console.error("Websocket message recieve error: " + error);
         }
     });
@@ -121,12 +128,14 @@ router.ws('/newsocket', (ws, req) => {
             //then add the oppoent back to the queue
             let game = games[player.gameID];
             let opponent = (game.p1.id == player.id) ? game.p2 : game.p1;
+            opponent.socket.send(JSON.stringify({
+                action: "win",
+                value: game.state 
+            }));
             delete games[player.gameID];
             opponent.gameID = '';
-            wsQueue.push(opponent);
             console.log('WS # ' + player.id + ' has left the game WS #' + opponent.id + ' has won the game.');
             console.log('Succesfully removed game with ID: ' + player.gameID);
-            console.log('WS # ' + opponent.id + ' was added back to the Queue');
           //TODO: LET OPPONENET KNOW THAT THEY WON
         }
     })

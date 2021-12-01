@@ -23,14 +23,18 @@ function createWebsocket() {
             // TODO: Handle ties
             updateGame(data.value)
             alert("tie game")
+            webSocket.close()
         } else if (data.action == "win") {
             updateGame(data.value)
             // TODO: Handle wins
             alert("win game")
+            webSocket.close();
         } else if (data.action == "lose") {
             updateGame(data.value)
             // TODO: Handle loss
+            // close socket
             alert("lose game")
+            webSocket.close();
         } else if (data.action == "rollback") {
             // TODO: Handle rollback
             alert(`rolling back: ${data.message}`)
@@ -42,6 +46,7 @@ function createWebsocket() {
             console.log("Unknown action")
         }
     }
+
 }
 
 //Update the client's html based on the given gamestate
@@ -70,6 +75,12 @@ function foundGame(gameInfo) {
 
 function updateToken(token) {
     document.getElementById('myToken').innerHTML = token
+}
+
+function refindGame() {
+    let div = document.getElementById('interaction-swap')
+    div.innerHTML = ''
+    div.innerHTML = `<button onclick="startMatchmaking()">Find a Game</button>`
 }
 
 window.startMatchmaking = startMatchmaking
