@@ -27,7 +27,6 @@ function updateMatchFound() {
 
     <div>
         <button id="forfeitBtn" onclick="forfeit()">Forfeit Game</button>
-        <button id="updateToken" onclick="updateToken()">Update Token</button>
     </div>
     `
 }
