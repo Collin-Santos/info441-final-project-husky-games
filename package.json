@@ -7,7 +7,8 @@
     "node": "~14"
   },
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "mocha"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -17,5 +18,9 @@
     "express-ws": "^5.0.2",
     "microsoft-identity-express": "github:azure-samples/microsoft-identity-express",
     "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^9.1.3"
   }
 }

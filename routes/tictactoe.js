@@ -7,6 +7,8 @@
  *          {
  *              valid: false,
  *              gameState: gameState
+ *              gameWon: should be false,
+ *              tied: should be false
  *          }
  * 
  *      On valid move:
@@ -14,7 +16,8 @@
  *              valid: true,
  *              gameState: playerState,
  *              lastTurn: String representation of last token used,
- *              gameWon: Boolean defining if game has been won
+ *              gameWon: Boolean defining if game has been won,
+ *              tied: Boolean if game was tied
  *          }
  * 
 */
@@ -140,6 +143,7 @@ function checkTie(gameState) {
 
 // -----------------------------------------------------------------------
 // unit tests
+// depreceated : moved to tests/tictactoe.test.js -> cmd npm test
 
 function runTests() {
 
