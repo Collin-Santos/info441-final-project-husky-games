@@ -50,7 +50,7 @@ app.get('/signin',
 
 app.get('/signout', 
     msid.signOut({
-        postLogoutRedirect: 'https://neemashokri.me'
+        postLogoutRedirect: '/'
     }
 ));
 
