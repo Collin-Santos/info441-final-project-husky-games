@@ -1,6 +1,7 @@
  import * as wsUtils from './websockets.js';
 
 function updateMatchSearching() {
+    document.getElementById('post-game').innerHTML = ''
     let gameContainer = document.getElementById('interaction-swap')
     gameContainer.innerHTML = ''
     gameContainer.innerHTML = 'searching...'
@@ -29,6 +30,18 @@ function updateMatchFound() {
         <button id="forfeitBtn" onclick="forfeit()">Forfeit Game</button>
     </div>
     `
+}
+
+function updateEndGameText(status) {
+    document.getElementById('game-information').innerHTML = `
+    <h1>You ${status}!</h1>`
+    refindGameButton()
+}
+
+function refindGameButton() {
+    let div = document.getElementById('post-game')
+    div.innerHTML = ''
+    div.innerHTML = `<button onclick="startMatchmaking()">Find a Game</button>`
 }
 
 // makeMove function - updates gameState
@@ -98,6 +111,7 @@ function rollback(gameState) {
 //Set all functions to be globally scoped
 window.updateMatchSearching = updateMatchSearching;
 window.updateMatchFound = updateMatchFound;
+window.updateEndGameText = updateEndGameText;
 window.makeMove = makeMove;
 window.forfeit = forfeit;
 window.updateToken = updateToken;

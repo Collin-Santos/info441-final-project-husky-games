@@ -5,6 +5,8 @@ function startMatchmaking() {
     createWebsocket()
 }
 
+window.startMatchmaking = startMatchmaking
+
 function createWebsocket() {
     const socketProtocol = (window.location.protocol === 'https:' ? 'wss:' : 'ws:');
     const portInfo = (window.location.port != 80 && window.location.port != 443 ? ":" + window.location.port  : '');
@@ -20,21 +22,20 @@ function createWebsocket() {
         if (data.action == "update") {
             updateGame(data.value);
         } else if (data.action == "tied") {
-            // TODO: Handle ties
+            // Handle ties
             updateGame(data.value)
-            alert("tie game")
             webSocket.close()
+            updateEndGameText('Tied')
         } else if (data.action == "win") {
+            // Handle wins
             updateGame(data.value)
-            // TODO: Handle wins
-            alert("win game")
             webSocket.close();
+            updateEndGameText('Won')
         } else if (data.action == "lose") {
+            // Handle loss
             updateGame(data.value)
-            // TODO: Handle loss
-            // close socket
-            alert("lose game")
             webSocket.close();
+            updateEndGameText('Lost')
         } else if (data.action == "rollback") {
             // TODO: Handle rollback
             alert(`rolling back: ${data.message}`)
@@ -76,14 +77,6 @@ function foundGame(gameInfo) {
 function updateToken(token) {
     document.getElementById('myToken').innerHTML = token
 }
-
-function refindGame() {
-    let div = document.getElementById('interaction-swap')
-    div.innerHTML = ''
-    div.innerHTML = `<button onclick="startMatchmaking()">Find a Game</button>`
-}
-
-window.startMatchmaking = startMatchmaking
 
 //Given a JSON object send a message to websocket middleware
 export function sendMessage(message) {
