@@ -26,94 +26,111 @@ router.ws('/newsocket', (ws, req) => {
         try {
             console.log(msg);
             const msgJSON = JSON.parse(msg);
-            if (msgJSON.action == "chat") { 
-                const payloadChat = {
-                    action: "chat",
-                    value: {message: msgJSON.value, name: player.id}
-                }
-                player.socket.send(JSON.stringify(payloadChat))
-                player.opponent.socket.send(JSON.stringify(payloadChat))
-            } else if (msgJSON.action == "forfeit") {
-                const payloadWin = {
-                    action: "win",
-                    value: games[player.gameID].state 
-                }
-                const payloadLose = {
-                    action: "lose",
-                    value: games[player.gameID].state 
-                }
-                player.socket.send(JSON.stringify(payloadLose))
-                player.opponent.socket.send(JSON.stringify(payloadWin))
-            } else if (msgJSON.action == "token") {
-                player.socket.send(JSON.stringify({
-                    action: "token",
-                    value: player.token
-                }))
-            } else if (msgJSON.action == "makeMove") {
-                // Check against game logic
-                if (games[player.gameID].turn != player.id) {
-                    // Check for turn
-                    player.socket.send(JSON.stringify({
-                        action: "rollback",
-                        value: games[player.gameID].state,
-                        message: "Not your turn"
-                    }))
-                } else {
-                    const currentGameState = games[player.gameID].state
-                    const gameLogic = tictactoe(msgJSON.value, currentGameState)
 
-                    if (gameLogic.valid) {
-                        if (gameLogic.tied) {
-                            // tie logic
-                            const payload = {
-                                action: "tied",
-                                value: gameLogic.gameState
-                            }
-                            games[player.gameID].p1.socket.send(JSON.stringify(
-                                payload
-                            ))
-                            games[player.gameID].p2.socket.send(JSON.stringify(
-                                payload
-                            ))
-                            // TODO: End game
-                        } else if (!gameLogic.gameWon) {
-                            // Update gamestate
-                            const payload = {
-                                action: "update",
-                                value: gameLogic.gameState
-                            }
-                            games[player.gameID].state = gameLogic.gameState
-                            // Send game state
-                            games[player.gameID].p1.socket.send(JSON.stringify(
-                                payload
-                            ))
-                            games[player.gameID].p2.socket.send(JSON.stringify(
-                                payload
-                            ))
-                            // Pass turn
-                            games[player.gameID].turn = player.opponent.id
-                        } else {
-                            // Game won, notify players and end game
-                            const payloadWin = {
-                                action: "win",
-                                value: gameLogic.gameState
-                            }
-                            const payloadLose = {
-                                action: "lose",
-                                value: gameLogic.gameState
-                            }
-                            player.socket.send(JSON.stringify(payloadWin))
-                            player.opponent.socket.send(JSON.stringify(payloadLose))
-                        }
-                    } else {
-                        // Rollback and prompt reinput
+            switch (msgJSON.action) {
+
+                // Chat Action
+                case 'chat':
+                    const payloadChat = {
+                        action: "chat",
+                        value: {message: msgJSON.value, name: player.id}
+                    }
+                    player.socket.send(JSON.stringify(payloadChat))
+                    player.opponent.socket.send(JSON.stringify(payloadChat))
+                    break;
+                
+                // Forfeit Action
+                case 'forfeit':
+                    const payloadWin = {
+                        action: "win",
+                        value: games[player.gameID].state 
+                    }
+                    const payloadLose = {
+                        action: "lose",
+                        value: games[player.gameID].state 
+                    }
+                    player.socket.send(JSON.stringify(payloadLose))
+                    player.opponent.socket.send(JSON.stringify(payloadWin))
+                    break;
+                
+                // Token Request Action
+                case 'token':
+                    player.socket.send(JSON.stringify({
+                        action: "token",
+                        value: player.token
+                    }))
+                    break;
+                
+                // Game Move Request Action
+                case 'makeMove':
+                    // Check against game logic
+                    if (games[player.gameID].turn != player.id) {
+                        // Check for turn
                         player.socket.send(JSON.stringify({
                             action: "rollback",
-                            value: gameLogic.gameState,
-                            message: "Invalid move"
+                            value: games[player.gameID].state,
+                            message: "Not your turn"
                         }))
+                    } else {
+                        const currentGameState = games[player.gameID].state
+                        const gameLogic = tictactoe(msgJSON.value, currentGameState)
+
+                        if (gameLogic.valid) {
+                            if (gameLogic.tied) {
+                                // tie logic
+                                const payload = {
+                                    action: "tied",
+                                    value: gameLogic.gameState
+                                }
+                                games[player.gameID].p1.socket.send(JSON.stringify(
+                                    payload
+                                ))
+                                games[player.gameID].p2.socket.send(JSON.stringify(
+                                    payload
+                                ))
+                                // TODO: End game
+                            } else if (!gameLogic.gameWon) {
+                                // Update gamestate
+                                const payload = {
+                                    action: "update",
+                                    value: gameLogic.gameState
+                                }
+                                games[player.gameID].state = gameLogic.gameState
+                                // Send game state
+                                games[player.gameID].p1.socket.send(JSON.stringify(
+                                    payload
+                                ))
+                                games[player.gameID].p2.socket.send(JSON.stringify(
+                                    payload
+                                ))
+                                // Pass turn
+                                games[player.gameID].turn = player.opponent.id
+                            } else {
+                                // Game won, notify players and end game
+                                const payloadWin = {
+                                    action: "win",
+                                    value: gameLogic.gameState
+                                }
+                                const payloadLose = {
+                                    action: "lose",
+                                    value: gameLogic.gameState
+                                }
+                                player.socket.send(JSON.stringify(payloadWin))
+                                player.opponent.socket.send(JSON.stringify(payloadLose))
+                            }
+                        } else {
+                            // Rollback and prompt reinput
+                            player.socket.send(JSON.stringify({
+                                action: "rollback",
+                                value: gameLogic.gameState,
+                                message: "Invalid move"
+                            }))
+                        }
                     }
-                }
+                    break;
+                // Fallback
+                default:
+                    console.log('Unknown action provided')
             }
         } catch(error) {
             console.error("Websocket message recieve error: " + error);
