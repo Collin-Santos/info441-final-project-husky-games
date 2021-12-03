@@ -19,34 +19,40 @@ function createWebsocket() {
         console.log("Receieved Message: ");
         let data = JSON.parse(event.data);
         console.log(event.data);
-        if (data.action == "update") {
-            updateGame(data.value);
-        } else if (data.action == "tied") {
-            // Handle ties
-            updateGame(data.value)
-            webSocket.close()
-            updateEndGameText('Tied')
-        } else if (data.action == "win") {
-            // Handle wins
-            updateGame(data.value)
-            webSocket.close();
-            updateEndGameText('Won')
-        } else if (data.action == "lose") {
-            // Handle loss
-            updateGame(data.value)
-            webSocket.close();
-            updateEndGameText('Lost')
-        } else if (data.action == "rollback") {
-            // TODO: Handle rollback
-            alert(`rolling back: ${data.message}`)
-        } else if (data.action == "token") {
-            updateToken(data.value)
-        } else if (data.action == "found") {
-            foundGame(data.value)
-        } else if (data.action == "chat") {
-            receiveChat(data.value);
-        } else {
-            console.log("Unknown action")
+        switch(data.action) {
+            case 'update':
+                updateGame(data.value)
+                break;
+            case 'tied':
+                updateGame(data.value)
+                webSocket.close()
+                updateEndGameText('Tied')
+                break;
+            case 'win':
+                updateGame(data.value)
+                webSocket.close()
+                updateEndGameText('Won')
+                break;
+            case 'lose':
+                updateGame(data.value)
+                webSocket.close();
+                updateEndGameText('Lost')
+                break;
+            case 'rollback': //TODO: Handle rollback properly
+                alert(`rolling back: ${data.message}`)
+                break;
+            case 'token':
+                updateToken(data.value)
+                break;
+            case 'found':
+                foundGame(data.value)
+                break;
+            case 'chat':
+                receiveChat(data.value)
+                break;
+            default:
+                console.log('Unknown Action')
+                break;
         }
     }
 }
