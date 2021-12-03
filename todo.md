@@ -10,6 +10,9 @@
   - Remove alerts
   - Add research button
 
+## General HTML
+- Fix navbar
+
 ## Home Page
 - Add login button for azure
   - Allow user handle updates
@@ -18,6 +21,7 @@
   - Assign name 'Guest ${websocket.id}
 
 ## Game Page
+- Better html
 
 ## Leaderboards Page
 
