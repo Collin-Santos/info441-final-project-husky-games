@@ -43,11 +43,12 @@ function createWebsocket() {
             updateToken(data.value)
         } else if (data.action == "found") {
             foundGame(data.value)
+        } else if (data.action == "chat") {
+            receiveChat(data.value);
         } else {
             console.log("Unknown action")
         }
     }
-
 }
 
 //Update the client's html based on the given gamestate

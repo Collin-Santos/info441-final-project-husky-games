@@ -11,7 +11,7 @@ function loadNavbar() {
           <a class="nav-link" href="/tictactoe.html">Tic-Tac-Toe</a>
         </li>
         <li class="nav-item" id="nav-leader-button">
-          <a class="nav-link disabled" href="#">Leaderboards</a>
+          <a class="nav-link disabled" href="/leaderboards.html">Leaderboards</a>
         </li>
       </ul>
       <a class="btn btn-outline-success my-2 my-sm-0" href="/signin">Login</a>

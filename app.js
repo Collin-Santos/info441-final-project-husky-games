@@ -6,6 +6,7 @@ import logger from 'morgan';
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import wsRouter from './routes/websockets.js';
+import apiRouter from './routes/api.js';
 import sessions from 'express-session'; 
 import MsIdExpress from 'microsoft-identity-express';
 import { createRequire } from 'module';
@@ -29,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/websockets', wsRouter);
 app.use('/users', usersRouter);
+app.use('/api', apiRouter);
 
 const oneDay = 1000 * 60 * 60 * 24;
 const secret = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 25);

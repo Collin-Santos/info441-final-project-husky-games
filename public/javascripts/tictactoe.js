@@ -11,25 +11,44 @@ function updateMatchFound() {
     let gameContainer = document.getElementById('interaction-swap')
     gameContainer.innerHTML = ''
     gameContainer.innerHTML = `
-    <div class="container">
-        <h1>Tic Tac Toe</h1>
-        <div class="game-frame">
-        <div id="tile_0" class="tile" onclick="makeMove(0)"></div>
-        <div id="tile_1" class="tile" onclick="makeMove(1)"></div>
-        <div id="tile_2" class="tile" onclick="makeMove(2)"></div>
-        <div id="tile_3" class="tile" onclick="makeMove(3)"></div>
-        <div id="tile_4" class="tile" onclick="makeMove(4)"></div>
-        <div id="tile_5" class="tile" onclick="makeMove(5)"></div>
-        <div id="tile_6" class="tile" onclick="makeMove(6)"></div>
-        <div id="tile_7" class="tile" onclick="makeMove(7)"></div>
-        <div id="tile_8" class="tile" onclick="makeMove(8)"></div>
+    <div>
+
+        <div class="container">
+            <h1>Tic Tac Toe</h1>
+            <div class="game-frame">
+            <div id="tile_0" class="tile" onclick="makeMove(0)"></div>
+            <div id="tile_1" class="tile" onclick="makeMove(1)"></div>
+            <div id="tile_2" class="tile" onclick="makeMove(2)"></div>
+            <div id="tile_3" class="tile" onclick="makeMove(3)"></div>
+            <div id="tile_4" class="tile" onclick="makeMove(4)"></div>
+            <div id="tile_5" class="tile" onclick="makeMove(5)"></div>
+            <div id="tile_6" class="tile" onclick="makeMove(6)"></div>
+            <div id="tile_7" class="tile" onclick="makeMove(7)"></div>
+            <div id="tile_8" class="tile" onclick="makeMove(8)"></div>
+            </div>
         </div>
+
+        <div class="chat-container">
+            <div id="messages">
+            </div>
+            <input id="send_chat_input" type="text"/>
+            <button onclick="sendChat()">Send Message</button>
+        </div> 
     </div>
 
-    <div>
-        <button id="forfeitBtn" onclick="forfeit()">Forfeit Game</button>
-    </div>
-    `
+        <div>
+            <button id="forfeitBtn" onclick="forfeit()">Forfeit Game</button>
+        </div>`
+}
+
+function receiveChat(jsonObj){
+    document.getElementById('messages').innerHTML += `<p>${jsonObj.name}: ${jsonObj.message}</p>`;
+}
+
+function sendChat(){
+    let message = document.getElementById('send_chat_input').value;
+    let jsonObject = {action: "chat", value: message};
+    wsUtils.sendMessage(jsonObject);
 }
 
 function updateEndGameText(status) {
@@ -115,3 +134,5 @@ window.updateEndGameText = updateEndGameText;
 window.makeMove = makeMove;
 window.forfeit = forfeit;
 window.updateToken = updateToken;
+window.sendChat = sendChat;
+window.receiveChat = receiveChat;

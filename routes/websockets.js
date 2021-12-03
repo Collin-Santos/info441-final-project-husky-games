@@ -26,7 +26,14 @@ router.ws('/newsocket', (ws, req) => {
         try {
             console.log(msg);
             const msgJSON = JSON.parse(msg);
-            if (msgJSON.action == "forfeit") {
+            if (msgJSON.action == "chat") { 
+                const payloadChat = {
+                    action: "chat",
+                    value: {message: msgJSON.value, name: player.id}
+                }
+                player.socket.send(JSON.stringify(payloadChat))
+                player.opponent.socket.send(JSON.stringify(payloadChat))
+            } else if (msgJSON.action == "forfeit") {
                 const payloadWin = {
                     action: "win",
                     value: games[player.gameID].state 
