@@ -39,3 +39,47 @@ a {
   cursor: pointer;
   background: #ab55c0;
 }
+
+ #Lboard-container {
+	width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: bold;
+  margin-top: 50px;
+}
+
+.row {
+	position: relative;
+	display: block;
+	width: 100%;
+	height: 50px;
+	border: 1px solid #AFAFAF;
+}
+
+#title-frame {
+  background-color: #2466bd;
+  padding: 10px;
+}
+
+h2 {
+  text-align: center;
+}
+
+.highlight:hover {
+  background-color: #bad3f3;
+}
+
+.name {
+	position: relative;
+	display: inline-block;
+	width: 75%;
+  padding-left: 20;
+	line-height: 45px;
+}
+
+.game-score {
+	position: relative;
+	display: inline-block;
+	width: 25%;
+  line-height: 45px;
+}
