@@ -88,7 +88,6 @@ router.ws('/newsocket', (ws, req) => {
                                 games[player.gameID].p2.socket.send(JSON.stringify(
                                     payload
                                 ))
-                                // TODO: End game
                             } else if (!gameLogic.gameWon) {
                                 // Update gamestate
                                 const payload = {
@@ -160,7 +159,6 @@ router.ws('/newsocket', (ws, req) => {
             opponent.gameID = '';
             console.log('WS # ' + player.id + ' has left the game WS #' + opponent.id + ' has won the game.');
             console.log('Succesfully removed game with ID: ' + player.gameID);
-          //TODO: LET OPPONENET KNOW THAT THEY WON
         }
     })
 
@@ -203,7 +201,6 @@ router.ws('/newsocket', (ws, req) => {
         }))
     }
     console.log("New Queue Length: " + wsQueue.length);
-    //TODO: ADD HANDLER FOR WS MESSAGES -> JSON OBJECTS SENT FROM THE CLIENT
 });
 
 export default router;

@@ -1,11 +1,6 @@
 # To Do List
 
-## Code Styling
-- if/else -> switch statement
-- clean websocket switch
-
 ## Websocket - Server
-- Cleanup switch statement
 - refactor if possible
 - return displayname with connect payload
 - update chat payload from id to displayname

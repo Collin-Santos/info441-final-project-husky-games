@@ -13,8 +13,6 @@ function createWebsocket() {
     const socketUrl = socketProtocol + '//' + window.location.hostname + portInfo + '/websockets/newsocket';
     webSocket = new WebSocket(socketUrl);
 
-    //TODO: ADD CONDITIONAL STATEMENTS FOR THE DIFFERENT ACTIONS
-    //I.E. "tied", "update", "win", "lose", "rollback", "token"
     webSocket.onmessage = function(event) {
         console.log("Receieved Message: ");
         let data = JSON.parse(event.data);
