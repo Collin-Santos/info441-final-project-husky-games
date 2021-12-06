@@ -33,7 +33,7 @@ function updateMatchFound() {
             </div>
             <input id="send_chat_input" type="text"/>
             <button onclick="sendChat()">Send Message</button>
-        </div> 
+        </div>
     </div>
 
         <div>
@@ -49,6 +49,7 @@ function sendChat(){
     let message = document.getElementById('send_chat_input').value;
     let jsonObject = {action: "chat", value: message};
     wsUtils.sendMessage(jsonObject);
+    document.getElementById('send_chat_input').value = '';
 }
 
 function updateEndGameText(status) {
@@ -67,7 +68,7 @@ function refindGameButton() {
 function makeMove(nextMoveIndex) {
     console.log("Attempting to make a move at index " + nextMoveIndex);
     // send string to new clients
-    // if valid move 
+    // if valid move
     if (validate(nextMoveIndex)) {
         //let updatedGame = updateGame(gameState, playerId, nextMoveIndex); // update game state
         let updatedGame = getGameState(nextMoveIndex); // update game state
@@ -110,7 +111,7 @@ function updateToken() {
     wsUtils.sendMessage({action: "token"})
 }
 
-// forfeit function - ends game 
+// forfeit function - ends game
 function forfeit() {
     // send string to new clients
     // value should return the current gameState
