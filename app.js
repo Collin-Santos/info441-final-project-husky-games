@@ -11,6 +11,8 @@ import sessions from 'express-session';
 import MsIdExpress from 'microsoft-identity-express';
 import { createRequire } from 'module';
 
+import db from '.database/db.js'
+
 const require = createRequire(import.meta.url);
 const appSettings = require('./credentials.json');
 
@@ -27,6 +29,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public'), {extensions:['html']}));
+app.use((req, res, next) => {
+  req.db = db
+  next()
+})
 
 const oneDay = 1000 * 60 * 60 * 24;
 const secret = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 25);

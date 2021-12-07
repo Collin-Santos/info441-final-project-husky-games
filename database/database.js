@@ -1,9 +1,8 @@
 import mongoose from 'mongoose';
 
 main().catch(err => console.log(err));
-let Player;
-let TicTacToe;
-let db;
+
+let db = {};
 
 async function main() {
     await mongoose.connect('mongodb://localhost/huskygamecenter');
@@ -19,10 +18,8 @@ async function main() {
         username: String
     })
 
-    Player = mongoose.model('Player', playerSchema);
-    TicTacToe = mongoose.model('TicTacToe', ticatactoeSchema);
-    db = {
-        Player: Player,
-        TicTacToe: TicTacToe
-    };
+    db.Player = mongoose.model('Player', playerSchema);
+    db.TicTacToe = mongoose.model('TicTacToe', ticatactoeSchema);
 }
+
+export default db
