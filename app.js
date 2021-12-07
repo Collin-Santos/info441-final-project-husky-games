@@ -28,11 +28,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public'), {extensions:['html']}));
 
-app.use('/', indexRouter);
-app.use('/websockets', wsRouter);
-app.use('/users', usersRouter);
-app.use('/api', apiRouter);
-
 const oneDay = 1000 * 60 * 60 * 24;
 const secret = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 25);
 app.use(sessions({
@@ -41,6 +36,11 @@ app.use(sessions({
     cookie: {maxAge: oneDay},
     resave: false
 }));
+
+app.use('/', indexRouter);
+app.use('/websockets', wsRouter);
+app.use('/users', usersRouter);
+app.use('/api', apiRouter);
 
 const msid = new MsIdExpress.WebAppAuthClientBuilder(appSettings).build();
 app.use(msid.initialize());
