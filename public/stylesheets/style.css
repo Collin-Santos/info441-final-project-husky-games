@@ -16,6 +16,18 @@ a {
   background: #eee;
 }
 
+.flex-container {
+  display: flex; /* or inline-flex */
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+
+}
+
+.chat-box {
+  background: #eee;
+}
+
 .game-frame {
   display: grid;
   width: 300px;

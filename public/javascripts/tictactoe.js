@@ -11,9 +11,9 @@ function updateMatchFound() {
     let gameContainer = document.getElementById('interaction-swap')
     gameContainer.innerHTML = ''
     gameContainer.innerHTML = `
-    <div>
+    <div class="flex-container">
 
-        <div class="container">
+        <div class="container flex-item-1">
             <h1>Tic Tac Toe</h1>
             <div class="game-frame">
             <div id="tile_0" class="tile" onclick="makeMove(0)"></div>
@@ -28,18 +28,34 @@ function updateMatchFound() {
             </div>
         </div>
 
-        <div class="chat-container">
-            <div id="messages">
+        <div class="chat-container flex-container-2">
+            <div class="chat-box flex-item-2" id="messages">
+            </div>
+
+            <div>
+                <input id="send_chat_input" onkeyup="pressEnter()" type="text"/>
+                <button onclick="sendChat()" id="chat_button">Send Message</button>
             </div>
             <input id="send_chat_input" type="text"/>
             <button onclick="sendChat()" id="chat_button">Send Message</button>
         </div>
+
     </div>
 
         <div>
             <button id="forfeitBtn" onclick="forfeit()">Forfeit Game</button>
         </div>`
+
+        document.getElementById("send_chat_input").addEventListener("keyup", function(event) {
+            console.log("here")
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                document.getElementById("chat_button").click()
+            }
+        });
 }
+
+
 
 function receiveChat(jsonObj){
     document.getElementById('messages').innerHTML += `<p>${jsonObj.name}: ${jsonObj.message}</p>`;
