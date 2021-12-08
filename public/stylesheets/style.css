@@ -19,12 +19,26 @@ a {
   display: flex; /* or inline-flex */
   flex-direction: row;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
 
+}
+
+.chat-container {
+  margin-left: 20px;
 }
 
 .chat-box {
   background: #eee;
+  height: 380px;
+  overflow: scroll;
+}
+
+#input-chat-button {
+  align-items: baseline;
+}
+
+.chat-box p {
+  margin: 15px;
 }
 
 .game-frame {

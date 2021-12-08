@@ -24,7 +24,7 @@ function updateMatchFound() {
     gameContainer.innerHTML = `
     <div class="flex-container">
 
-        <div class="container flex-item-1">
+        <div>
             <h1>Tic Tac Toe</h1>
             <div class="game-frame">
             <div id="tile_0" class="tile" onclick="makeMove(0)"></div>
@@ -42,8 +42,7 @@ function updateMatchFound() {
         <div class="chat-container flex-container-2">
             <div class="chat-box flex-item-2" id="messages">
             </div>
-
-            <div>
+            <div id="input-chat-button">
                 <input id="send_chat_input" type="text"/>
                 <button onclick="sendChat()" id="chat_button">Send Message</button>
             </div>
