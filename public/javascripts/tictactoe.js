@@ -1,5 +1,16 @@
 import * as wsUtils from './websockets.js';
 
+async function loadUserInfo() {
+    let response = await getIdentity()
+    let displayName = "Guest"
+    if (response.status != "error") {
+        displayName = response.displayname
+    }
+    document.getElementById("hidden-displayname-info").innerHTML = displayName
+    let responseTwo = await setdisplayname({displayname: displayName})
+    console.log(responseTwo)
+}
+
 function updateMatchSearching() {
     document.getElementById('post-game').innerHTML = ''
     let gameContainer = document.getElementById('interaction-swap')
@@ -36,8 +47,6 @@ function updateMatchFound() {
                 <input id="send_chat_input" type="text"/>
                 <button onclick="sendChat()" id="chat_button">Send Message</button>
             </div>
-            <input id="send_chat_input" type="text"/>
-            <button onclick="sendChat()" id="chat_button">Send Message</button>
         </div>
 
     </div>
@@ -53,8 +62,6 @@ function updateMatchFound() {
             }
         });
 }
-
-
 
 function receiveChat(jsonObj){
     document.getElementById('messages').innerHTML += `<p>${jsonObj.name}: ${jsonObj.message}</p>`;
@@ -144,6 +151,7 @@ function rollback(gameState) {
 }
 
 //Set all functions to be globally scoped
+window.loadUserInfo = loadUserInfo;
 window.updateMatchSearching = updateMatchSearching;
 window.updateMatchFound = updateMatchFound;
 window.updateEndGameText = updateEndGameText;

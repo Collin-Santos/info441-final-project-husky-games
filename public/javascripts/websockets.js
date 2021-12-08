@@ -70,8 +70,8 @@ function foundGame(gameInfo) {
     gameInfoDiv.innerHTML = ''
     gameInfoDiv.innerHTML = `
     <h1>Found Game:</h1>
-    <p>My Name: Guest ${gameInfo.id}</p>
-    <p>My Opponent: Guest ${gameInfo.opponent}</p>
+    <p>My Name: ${gameInfo.id}</p>
+    <p>My Opponent: ${gameInfo.opponent}</p>
     <p>My Token: ${gameInfo.token}</p>
     <div style="display:none;" id="myToken"></div>
     `

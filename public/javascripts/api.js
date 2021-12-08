@@ -36,6 +36,24 @@ async function getLeaderboardUser(user, game) {
     }
 }
 
+async function setdisplayname(displayname) {
+    try {
+        let response = await fetch('users/setdisplayname',
+        {
+            method: "POST",
+            body: JSON.stringify(displayname),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        let responseJson = response.json()
+        return responseJson
+    } catch (error) {
+        return { status: 'error', error: 'an error occured :(' }
+    }
+}
+
 window.getIdentity = getIdentity
 window.updateDisplayName = updateDisplayName
 window.getLeaderboardUser = getLeaderboardUser
+window.setdisplayname = setdisplayname
