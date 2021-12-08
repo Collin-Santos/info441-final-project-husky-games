@@ -50,6 +50,7 @@ a {
 .tile:hover {
   cursor: pointer;
   background: #ab55c0;
+
 }
 
  #Lboard-container {
@@ -79,6 +80,11 @@ h2 {
 
 .highlight:hover {
   background-color: #bad3f3;
+}
+
+.thead {
+  background-color: #4b2e83;
+  color: #b7a57a
 }
 
 .name {

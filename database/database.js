@@ -6,6 +6,7 @@ let db = {};
 
 async function main() {
     await mongoose.connect('mongodb://localhost/huskygamecenter');
+    // await mongoose.connect(process.env.MONGODB_URI)
 
     const playerSchema = new mongoose.Schema({
         username: String,
@@ -15,6 +16,7 @@ async function main() {
     const ticatactoeSchema = new mongoose.Schema({
         wins: Number,
         losses: Number,
+        ties: Number,
         username: String
     })
 

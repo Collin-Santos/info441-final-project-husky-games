@@ -49,26 +49,32 @@ router.get('/:game', async function(req, res) {
 //  Increments the players wins or losses of the given game
 //  based on whether they won or loss
 router.post('/:game', async function(req, res) {
-    try {
-        let gameSchema = req.db[getSchema(req.params.game)];
-        console.log(req.body.username);
-        console.log(req.body.won);
-        if (req.body.won) {
-            await gameSchema.findOneAndUpdate(
-            {username: req.body.username},
-            {$inc: {'wins': 1}}).exec();
+    let session = req.session
+    if (session.isAuthenticated) {
+        try {
+            let gameSchema = req.db[getSchema(req.params.game)];
+            console.log(session.account.username);
+            console.log(req.body.won);
+            if (req.body.tie) {
+                await gameSchema.findOneAndUpdate(
+                    {username: session.account.username},
+                    {$inc: {'ties': 1}}).exec();
+            } else if (req.body.won) {
+                await gameSchema.findOneAndUpdate(
+                {username: session.account.username},
+                {$inc: {'wins': 1}}).exec();
 
-        } else {
-            await gameSchema.findOneAndUpdate(
-            {username: req.body.username},
-            {$inc: {'losses': 1}}).exec();
+            } else {
+                await gameSchema.findOneAndUpdate(
+                {username: session.account.username},
+                {$inc: {'losses': 1}}).exec();
+            }
+            res.json({status: 'success', error: ''});
+        } catch (error) {
+            res.json({status: 'error', error: error});
         }
-        res.json({status: 'success', error: ''});
-    } catch (error) {
-        res.json({status: 'error', error: error});
     }
 })
-
 
 
 export default router;

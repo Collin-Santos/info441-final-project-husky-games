@@ -53,7 +53,39 @@ async function setdisplayname(displayname) {
     }
 }
 
+async function reportGame(status, tie) {
+    try {
+        let response = await fetch('leaderboard/tictactoe',
+        {
+            method: "POST",
+            body: JSON.stringify({
+                won: status,
+                tie: tie
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        let responseJson = response.json()
+        return responseJson
+    } catch (error) {
+        return { status: 'error', error: 'error reporting game :('}
+    }
+}
+
+async function getLeaderboard() {
+    try {
+        let response = await fetch("/leaderboard/tictactoe?topN=10");
+        let responseJson = response.json();
+        return responseJson;
+    } catch (error) {
+        return {status: 'error', error: 'Error getting the leaderboard: ' + error};
+    }
+}
+
 window.getIdentity = getIdentity
 window.updateDisplayName = updateDisplayName
 window.getLeaderboardUser = getLeaderboardUser
 window.setdisplayname = setdisplayname
+window.reportGame = reportGame
+window.getLeaderboard = getLeaderboard

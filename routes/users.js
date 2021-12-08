@@ -93,7 +93,8 @@ router.get('/add', async (req, res) => {
        const newGame = {
          username: session.account.username,
          wins: 0,
-         losses: 0
+         losses: 0,
+         ties: 0
        }
        const options = {
          upsert: true

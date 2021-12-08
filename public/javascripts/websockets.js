@@ -25,16 +25,19 @@ function createWebsocket() {
                 updateGame(data.value)
                 webSocket.close()
                 updateEndGameText('Tied')
+                reportGame(false, true)
                 break;
             case 'win':
                 updateGame(data.value)
                 webSocket.close()
                 updateEndGameText('Won')
+                reportGame(true, false)
                 break;
             case 'lose':
                 updateGame(data.value)
                 webSocket.close();
                 updateEndGameText('Lost')
+                reportGame(false, false)
                 break;
             case 'rollback': 
                 alert(`rolling back: ${data.message}`)

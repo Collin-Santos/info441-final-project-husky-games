@@ -6,41 +6,55 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 
-<body onload="loadNavbar()">
+<body onload="loadNavbar(); loadLeaderboard()">
   <nav class="navbar navbar-expand-lg navbar-light bg-light" id="navbar-container">
   </nav>
 
-  <script type="module" src="javascripts/websockets.js"></script>
-  <script type="module" src="javascripts/index.js"></script>
+  <script type="module" src="javascripts/api.js"></script>
+  <script src="javascripts/leaderboard.js"></script>
   <script type="module" src="javascripts/navbar.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<!--  
+   <div id="Lboard-container">
+      <div class="row" id="title-frame">
+        <h2>LEADERBOARD</h2>
+      </div>
 
-  <div id="Lboard-container">
-    <div class="row" id="title-frame">
-      <h2>LEADERBOARD</h2>
-    </div>
+      <div class="row highlight" >
+          <div class="name">1. Jane Rochelle</div><div class="game-score">12312</div>
+      </div>
 
-    <div class="row highlight" >
-        <div class="name">1. Jane Rochelle</div><div class="game-score">12312</div>
-    </div>
+      <div class="row highlight">
+          <div class="name">2. Ashley Nava</div><div class="game-score">500</div>
+      </div>
 
-    <div class="row highlight">
-        <div class="name">2. Ashley Nava</div><div class="game-score">500</div>
-    </div>
+      <div class="row highlight">
+          <div class="name">3. John Grizzy</div><div class="game-score">310</div>
+      </div>
 
-    <div class="row highlight">
-        <div class="name">3. John Grizzy</div><div class="game-score">310</div>
-    </div>
+      <div class="row highlight">
+          <div class="name">4. Alexa Sanchez</div><div class="game-score">295</div>
+      </div>
 
-    <div class="row highlight">
-        <div class="name">4. Alexa Sanchez</div><div class="game-score">295</div>
-    </div>
+      <div class="row highlight">
+          <div class="name">5. Gabe Ross</div><div class="game-score">150</div>
+      </div>
+</div> -->
 
-    <div class="row highlight">
-        <div class="name">5. Gabe Ross</div><div class="game-score">150</div>
-    </div>
-</div>
+<table class="table">
+  <thead class="thead">
+    <tr>
+      <th scope="col">Ranking</th>
+      <th scope="col">Display Name</th>
+      <th scope="col">Wins</th>
+      <th scope="col">Losses</th>
+      <th scope="col">Ties</th>
+    </tr>
+  </thead>
+  <tbody id="leaderboard-body">
+  </tbody>
+</table>
 
 </body>
 </html>
