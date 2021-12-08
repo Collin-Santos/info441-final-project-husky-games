@@ -43,7 +43,7 @@ function updateMatchFound() {
             <div class="chat-box flex-item-2" id="messages">
             </div>
             <div id="input-chat-button">
-                <input id="send_chat_input" type="text"/>
+                <input id="send_chat_input" type="text" placeholder="Type Message..."/>
                 <button onclick="sendChat()" id="chat_button">Send Message</button>
             </div>
         </div>
@@ -63,14 +63,21 @@ function updateMatchFound() {
 }
 
 function receiveChat(jsonObj){
-    document.getElementById('messages').innerHTML += `<p>${jsonObj.name}: ${jsonObj.message}</p>`;
+    document.getElementById('messages').innerHTML += `
+    <div class="${jsonObj.receive}">
+        <p class="message-content">${jsonObj.message}</p>
+        <div class="message-timestamp-left">${jsonObj.name}</div>
+    </div>`;
 }
 
 function sendChat(){
     let message = document.getElementById('send_chat_input').value;
-    let jsonObject = {action: "chat", value: message};
-    wsUtils.sendMessage(jsonObject);
-    document.getElementById('send_chat_input').value = '';
+    // if not an empty input 
+    if(message.length != 0) {
+        let jsonObject = {action: "chat", value: message};
+        wsUtils.sendMessage(jsonObject);
+        document.getElementById('send_chat_input').value = '';
+    }
 }
 
 function updateEndGameText(status) {
