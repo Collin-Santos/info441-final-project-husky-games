@@ -76,6 +76,9 @@ function sendChat(){
 function updateEndGameText(status) {
     document.getElementById('game-information').innerHTML = `
     <h1>You ${status}!</h1>`
+    //TODO: GHIS HERE
+    //Status will be "Win", "Loss", "Tied"
+    document.getElementById('interaction-swap').innerHTML = ""
     refindGameButton()
 }
 

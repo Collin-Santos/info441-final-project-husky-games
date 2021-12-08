@@ -14,7 +14,21 @@ import { createRequire } from 'module';
 import db from './database/database.js'
 
 const require = createRequire(import.meta.url);
-const appSettings = require('./credentials.json');
+// Swap for azure deploy
+// const appSettings = require('./credentials.json');
+const appSettings = {
+  appCredentials: {
+    tenantId: process.env.AZURE_TENANT_ID,
+    clientId: process.env.AZURE_CLIENT_ID,
+    clientSecret: process.env.AZURE_CLIENT_SECRET
+  },
+
+  authRoutes: {
+    redirect: "https://huskygamecenter.azurewebsites.net/redirect",
+    error: "/error",
+    unauthorized: "/unauthorized"
+  }
+}
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
