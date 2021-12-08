@@ -1,5 +1,4 @@
 import express from 'express';
-import mongoose from 'mongoose';
 
 var router = express.Router();
 
@@ -15,6 +14,20 @@ function getSchema(game) {
             return null;
     } 
 }
+
+//  GET user specific leaderboard
+//  returns the player stats of a given user for a given game
+router.get('/leaderboard/:user/:game', async function(req, res) {
+   try {
+       let username = req.params.user;
+       let game = req.params.game;
+       let gameSchema = req.db[getSchema(game)];
+       let playerLeaderboard = gameSchema.findOne({username: username});
+       res.json(playerLeaderboard);
+   } catch(error) {
+       res.json({status: 'error', error: error})
+   }
+})
 
 //  GET leaderboard handler
 //  Sends back a json of the top n (defaults to 10) players of the given game
@@ -55,5 +68,7 @@ router.post('/leaderboard/:game', async function(req, res) {
         res.json({status: 'error', error: error});
     }
 })
+
+
 
 export default router;

@@ -36,7 +36,7 @@ function createWebsocket() {
                 webSocket.close();
                 updateEndGameText('Lost')
                 break;
-            case 'rollback': //TODO: Handle rollback properly
+            case 'rollback': 
                 alert(`rolling back: ${data.message}`)
                 break;
             case 'token':

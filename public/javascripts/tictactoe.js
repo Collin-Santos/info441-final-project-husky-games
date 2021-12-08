@@ -32,7 +32,7 @@ function updateMatchFound() {
             <div id="messages">
             </div>
             <input id="send_chat_input" type="text"/>
-            <button onclick="sendChat()">Send Message</button>
+            <button onclick="sendChat()" id="chat_button">Send Message</button>
         </div>
     </div>
 

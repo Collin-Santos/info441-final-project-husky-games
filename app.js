@@ -6,7 +6,7 @@ import logger from 'morgan';
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import wsRouter from './routes/websockets.js';
-import apiRouter from './routes/api.js';
+import leaderboardRouter from './routes/leaderboard.js';
 import sessions from 'express-session'; 
 import MsIdExpress from 'microsoft-identity-express';
 import { createRequire } from 'module';
@@ -46,7 +46,7 @@ app.use(sessions({
 app.use('/', indexRouter);
 app.use('/websockets', wsRouter);
 app.use('/users', usersRouter);
-app.use('/api', apiRouter);
+app.use('/leaderboard', leaderboardRouter);
 
 const msid = new MsIdExpress.WebAppAuthClientBuilder(appSettings).build();
 app.use(msid.initialize());
