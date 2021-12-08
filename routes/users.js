@@ -39,6 +39,34 @@ router.get('/identity', async (req, res) => {
   }
 })
 
+router.post('/displayname', async (req, res) => {
+  let session = req.session
+  if (session.isAuthenticated) {
+    try {
+      let newDisplayName = req.body.username
+      await req.db.Player.findOneAndUpdate(
+        { username: session.account.username },
+        { $set: { displayname: newDisplayName } })
+      
+      res.json({
+        status: 'success',
+        error: 'display name updated'
+      })
+      
+    } catch (error) {
+      res.json({
+        status: 'error',
+        error: 'server error occured'
+      })
+    }
+  } else {
+    res.json({
+      status: 'error',
+      error: 'not logged in'
+    })
+  }
+})
+
 
 /* GET users */
 // Adds user to users database if the user isn't already in the database

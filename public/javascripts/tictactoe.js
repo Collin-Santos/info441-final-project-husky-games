@@ -33,7 +33,7 @@ function updateMatchFound() {
             </div>
 
             <div>
-                <input id="send_chat_input" onkeyup="pressEnter()" type="text"/>
+                <input id="send_chat_input" type="text"/>
                 <button onclick="sendChat()" id="chat_button">Send Message</button>
             </div>
             <input id="send_chat_input" type="text"/>
@@ -47,7 +47,6 @@ function updateMatchFound() {
         </div>`
 
         document.getElementById("send_chat_input").addEventListener("keyup", function(event) {
-            console.log("here")
             if (event.keyCode === 13) {
                 event.preventDefault();
                 document.getElementById("chat_button").click()
