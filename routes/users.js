@@ -18,8 +18,29 @@ router.get('/', function(req, res) {
     }
 });
 
+router.get('/identity', async (req, res) => {
+  let session = req.session
+  if (session.isAuthenticated) {
+    try {
+      let loggedUser = await req.db.Player.findOne(
+        { username: session.account.username }).exec()
+      res.json(loggedUser)
+    } catch (error) {
+      res.json({
+        status: "error",
+        error: "not logged in"
+      })
+    }
+  } else {
+    res.json({
+      status: "error",
+      error: "not logged in"
+    })
+  }
+})
 
-/* POST users */
+
+/* GET users */
 // Adds user to users database if the user isn't already in the database
 router.get('/add', async (req, res) => {
   let session = req.session;
