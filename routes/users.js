@@ -67,6 +67,16 @@ router.post('/displayname', async (req, res) => {
   }
 })
 
+router.post('/setdisplayname', async (req, res) => {
+  let session = req.session
+  if (session) {
+    session.gamedisplayname = req.body.displayname
+    res.json({status: "success"})
+  } else {
+    res.json({status: "error", error: "no session found"})
+  }
+})
+
 
 /* GET users */
 // Adds user to users database if the user isn't already in the database

@@ -14,6 +14,7 @@ router.ws('/newsocket', (ws, req) => {
     //Create and add a new player to q when WS opens
     let player = {
         id: wsCounter,
+        displayName: req.session.gamedisplayname,
         socket: ws,
         gameID: '',
         token: ''
@@ -28,15 +29,14 @@ router.ws('/newsocket', (ws, req) => {
             const msgJSON = JSON.parse(msg);
 
             switch (msgJSON.action) {
-
                 // Chat Action
                 case 'chat':
                     const payloadChat = {
                         action: "chat",
-                        value: {message: msgJSON.value, name: player.id}
+                        value: {message: msgJSON.value, name: player.displayName}
                     }
                     player.socket.send(JSON.stringify(payloadChat))
-                    player.opponent.socket.send(JSON.stringify(payloadChat))
+                    player.opponentSocket.send(JSON.stringify(payloadChat))
                     break;
                 
                 // Forfeit Action
@@ -50,7 +50,7 @@ router.ws('/newsocket', (ws, req) => {
                         value: games[player.gameID].state 
                     }
                     player.socket.send(JSON.stringify(payloadLose))
-                    player.opponent.socket.send(JSON.stringify(payloadWin))
+                    player.opponentSocket.send(JSON.stringify(payloadWin))
                     break;
                 
                 // Token Request Action
@@ -103,7 +103,7 @@ router.ws('/newsocket', (ws, req) => {
                                     payload
                                 ))
                                 // Pass turn
-                                games[player.gameID].turn = player.opponent.id
+                                games[player.gameID].turn = player.opponentId
                             } else {
                                 // Game won, notify players and end game
                                 const payloadWin = {
@@ -115,7 +115,7 @@ router.ws('/newsocket', (ws, req) => {
                                     value: gameLogic.gameState
                                 }
                                 player.socket.send(JSON.stringify(payloadWin))
-                                player.opponent.socket.send(JSON.stringify(payloadLose))
+                                player.opponentSocket.send(JSON.stringify(payloadLose))
                             }
                         } else {
                             // Rollback and prompt reinput
@@ -170,10 +170,12 @@ router.ws('/newsocket', (ws, req) => {
         const gameID = p1.id + '-' + p2.id;
 
         p1.gameID = gameID;
-        p1.opponent = p2;
+        p1.opponentSocket = p2.socket;
+        p1.opponentId = p2.id
         p1.token = 'X'
         p2.gameID = gameID;
-        p2.opponent = p1;
+        p2.opponentSocket = p1.socket;
+        p2.opponentId = p1.id
         p2.token = 'O'
         let newGame = {
             p1: p1,
@@ -187,16 +189,16 @@ router.ws('/newsocket', (ws, req) => {
             action: "found",
             value: {
                 token: p1.token,
-                id: p1.id,
-                opponent: p2.id
+                id: p1.displayName,
+                opponent: p2.displayName
             }
         }))
         p2.socket.send(JSON.stringify({
             action: "found",
             value: {
                 token: p2.token,
-                id: p2.id,
-                opponent: p1.id
+                id: p2.displayName,
+                opponent: p1.displayName
             }
         }))
     }
