@@ -11,7 +11,7 @@ import sessions from 'express-session';
 import MsIdExpress from 'microsoft-identity-express';
 import { createRequire } from 'module';
 
-import db from '.database/db.js'
+import db from './database/database.js'
 
 const require = createRequire(import.meta.url);
 const appSettings = require('./credentials.json');
