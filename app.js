@@ -53,7 +53,7 @@ app.use(msid.initialize());
 
 app.get('/signin',
   msid.signIn({
-    postLoginRedirect: '/',
+    postLoginRedirect: '/users/add',
   }
 ));
 

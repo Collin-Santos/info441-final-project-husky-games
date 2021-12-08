@@ -21,10 +21,40 @@ router.get('/', function(req, res) {
 
 /* POST users */
 // Adds user to users database if the user isn't already in the database
-router.post('/', (req, res) => {
+router.get('/add', async (req, res) => {
   let session = req.session;
+  let Player = req.db.Player
+  let TicTacToe = req.db.TicTacToe
   if (session && session.isAuthenticated) {
-    //req.db.
+    try {
+         const newPlayer = {
+         username: session.account.username,
+         displayname: session.account.name
+       }
+       const newGame = {
+         username: session.account.username,
+         wins: 0,
+         losses: 0
+       }
+       const options = {
+         upsert: true
+       }
+       
+       await Player.findOneAndUpdate(
+         { username: session.account.username },
+         { $setOnInsert: newPlayer },
+         options)
+
+       await TicTacToe.findOneAndUpdate(
+         { username: session.account.username},
+         { $setOnInsert: newGame },
+         options
+       )
+    } catch (error) {
+      console.log(error.message)
+      console.log('Issue Saving New User To Database')
+    }
   }
+  res.redirect('/')
 });
 export default router;
