@@ -22,9 +22,20 @@ async function updateDisplayName(name) {
         let responseJson = response.json()
         return responseJson
     } catch (error) {
-        return { status: 'error', error: 'an error occured :('}
+        return { status: 'error', error: 'an error occured :(' }
+    }
+}
+
+async function getLeaderboardUser(user, game) {
+    try {
+        let response = await fetch(`leaderboard/${user}/${game}`)
+        let responseJson = await response.json()
+        return responseJson
+    } catch (error) {
+        return { status: 'error', error: 'an error occured :(' }
     }
 }
 
 window.getIdentity = getIdentity
 window.updateDisplayName = updateDisplayName
+window.getLeaderboardUser = getLeaderboardUser

@@ -17,12 +17,12 @@ function getSchema(game) {
 
 //  GET user specific leaderboard
 //  returns the player stats of a given user for a given game
-router.get('/leaderboard/:user/:game', async function(req, res) {
+router.get('/:user/:game', async function(req, res) {
    try {
        let username = req.params.user;
        let game = req.params.game;
        let gameSchema = req.db[getSchema(game)];
-       let playerLeaderboard = gameSchema.findOne({username: username});
+       let playerLeaderboard = await gameSchema.findOne({username: username}).exec();
        res.json(playerLeaderboard);
    } catch(error) {
        res.json({status: 'error', error: error})
@@ -34,7 +34,7 @@ router.get('/leaderboard/:user/:game', async function(req, res) {
 //  Which is deterimed/sorted by total number of wins
 //  Example Fetch:
 //  /leaderboard/tictactoe?topN = 50 
-router.get('/leaderboard/:game', async function(req, res) {
+router.get('/:game', async function(req, res) {
     try {
         let n = (req.query.topN) ? req.query.topN : 10;
         let gameSchema = req.db[getSchema(req.params.game)];
@@ -48,7 +48,7 @@ router.get('/leaderboard/:game', async function(req, res) {
 //  POST leaderboard handler
 //  Increments the players wins or losses of the given game
 //  based on whether they won or loss
-router.post('/leaderboard/:game', async function(req, res) {
+router.post('/:game', async function(req, res) {
     try {
         let gameSchema = req.db[getSchema(req.params.game)];
         console.log(req.body.username);
