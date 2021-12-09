@@ -13,9 +13,9 @@ import { createRequire } from 'module';
 
 import db from './database/database.js'
 
-const require = createRequire(import.meta.url);
+//const require = createRequire(import.meta.url);
 // Swap for azure deploy
-// const appSettings = require('./credentials.json');
+//const appSettings = require('./credentials.json');
 const appSettings = {
   appCredentials: {
     tenantId: process.env.AZURE_TENANT_ID,
@@ -78,7 +78,4 @@ app.get('/signout',
 ));
 
 app.get('/error', (req, res) => res.status(500).send('server error'));
-app.get('/unauthorized', (req, res) => res.status(401).send('Permission denied'));
-
-
-export default app;
+app.get('/unauthorized', (req, res) => res.status(401).send('

@@ -36,7 +36,7 @@ async function loadGreeting() {
             <li>Set your display name for others to see</li>
         </ul>
         <p>Login to get started now!</p>
-        <a class="btn btn-outline-success my-2 my-sm-0" href="/signin">Sign In</a>`
+        <a class="btn btn-outline-success my-2 my-sm-0" href="/signin">Login</a>`
     }
 }
 

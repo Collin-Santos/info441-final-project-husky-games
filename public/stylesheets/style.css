@@ -98,8 +98,19 @@ h2 {
 }
 
 .thead {
-  background-color: #4b2e83;
-  color: #b7a57a
+  color: #4b2e83;
+}
+
+#navbar-container {
+  background-color: #4b2e83; 
+}
+
+.navbar-brand, .nav-link {
+  color: #e8e3d3;
+}
+
+.navbar-brand:hover, .nav-link:hover {
+  color: white;
 }
 
 .name {

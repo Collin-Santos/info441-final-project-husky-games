@@ -6,7 +6,7 @@ let db = {};
 
 async function main() {
     // Swap for azure deploy
-    // await mongoose.connect('mongodb://localhost/huskygamecenter');
+    //await mongoose.connect('mongodb://localhost/huskygamecenter');
     await mongoose.connect(process.env.MONGODB_URI)
 
     const playerSchema = new mongoose.Schema({

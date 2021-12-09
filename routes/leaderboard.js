@@ -39,7 +39,21 @@ router.get('/:game', async function(req, res) {
         let n = (req.query.topN) ? req.query.topN : 10;
         let gameSchema = req.db[getSchema(req.params.game)];
         let gameLeaderboard = await gameSchema.find().sort({wins: -1}).limit(n).exec();
-        res.json(gameLeaderboard);
+        let results = [];
+        for (let i = 0; i < gameLeaderboard.length; i++) {
+            const player = gameLeaderboard[i];
+            let playerObject = await req.db.Player.findOne({username: player.username}).exec();
+            let resultPlayer = {
+                username: player.username,
+                displayname: playerObject.displayname,
+                wins: player.wins,
+                losses: player.losses,
+                ties: player.ties
+            };
+            results.push(resultPlayer);
+        }
+        console.log("Server Side: " + results);
+        res.json(results);
     } catch (error) {
         res.send("An error occured: " + error);
     }
