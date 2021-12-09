@@ -59,15 +59,3 @@ async function buttonUpdateUsername() {
 window.loadGreeting = loadGreeting
 window.buttonUpdateUsername = buttonUpdateUsername
 
-/**
-* Interval time for main header animation.
-*/
-  const TIME = 300;
-
-  window.addEventListener("load", animates);
-
-  function animates() {
-    setInterval(function() {
-      document.getElementById("main-header").classList.toggle("on-and-off");
-    }, TIME);
-  }

@@ -13,7 +13,7 @@ import { createRequire } from 'module';
 
 import db from './database/database.js'
 
-const require = createRequire(import.meta.url);
+//const require = createRequire(import.meta.url);
 // Swap for azure deploy
 //const appSettings = require('./credentials.json');
 const appSettings = {
