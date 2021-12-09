@@ -31,12 +31,25 @@ router.ws('/newsocket', (ws, req) => {
             switch (msgJSON.action) {
                 // Chat Action
                 case 'chat':
-                    const payloadChat = {
+                    const payloadChatSend = {
                         action: "chat",
-                        value: {message: msgJSON.value, name: player.displayName}
+                        value: {
+                            message: msgJSON.value,
+                            name: player.displayName, 
+                            receive: 'message-orange'
+                        }
                     }
-                    player.socket.send(JSON.stringify(payloadChat))
-                    player.opponentSocket.send(JSON.stringify(payloadChat))
+
+                    const payloadChatRecieve = {
+                        action: "chat",
+                        value: {
+                            message: msgJSON.value,
+                            name: player.displayName,
+                            receive: 'message-blue'
+                        }
+                    }
+                    player.socket.send(JSON.stringify(payloadChatSend))
+                    player.opponentSocket.send(JSON.stringify(payloadChatRecieve))
                     break;
                 
                 // Forfeit Action
