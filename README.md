@@ -2,6 +2,9 @@
 
 __Authors:__ Ghislaine Bungingo, Bryan Phan, Collin Santos, Neema Shokri
 
+# Website
+https://huskygamecenter.azurewebsites.net/
+
 # Project Description
 
 ## Overview
@@ -43,6 +46,12 @@ We want to create something that is real time and interactive for our users. As 
   - _(Extra)_ Game states with disconnects will be saved on the database. If users reconnect within a timeframe, the game state can be restored. Once enough time has elapsed, the game state will be wiped and player statistics updated.
   - _(Extra)_ On game completion, game moves will be pushed as an entry on the database and given a match id. This could allow us to implement a replay system.
 
+## Interaction Architecture
+![interaction architecture](diagrams\Interaction_Architecutre.jpg?raw=true)
+
+## Workflow
+![workflow](diagrams\workflow.jpg?raw=true)
+
 ## Feature Priorites
 
 | Priority | User | Description | Technical Implementation |
@@ -65,56 +74,70 @@ We want to create something that is real time and interactive for our users. As 
 
 ## API Endpoints
 
-- __GET__
-  - /users
-    - /signin
-      - Handle user authentication through Azure
-    - /signout
-      - Delete the users current session and sign them out
-    - /error
-      - Handle login and general server errors that may occur
-    - /unauthorized
-      - Deny access to matchmaking if not logged into a UW Mircosoft account
-  - /matchmake
-    - /search
-      - Inform the server that the client is open to pair with an opponent
-      - Waits for the server to pair with opponent and send matchmaking info
-      - Opens WebSocket for play
-    - /cancel
-      - Quit matchmaking and remove client from server queue
-  - /game
-    - /state
-      - Get current game state for client
-    - /leave
-      - Foreits match and closes connection to server
-      - Returns to landing
-  - /leaderboard
-    - /history
-      - Returns past games as a JSON payload for logged user
-    - /top
-      - Returns top 25 in terms of Wins
-      - Can specify ranges, i.e. 25-50
-- __POST__
-  - /users
-    - /changeDisplayName
-      - Change name for logged account to broadcast to other users
-      - Save and update on MongoDb
-    - /clearHistory
-      - Resets game counters for logged account
-- __WebSocket__
-  - On message
-    - Register action
-    - Apply game logic
-    - If: valid move
-      - Update game state
-      - Send JSON game state to websocket pairing
-    - If: invalid move
-      - Deny message
-      - Send requesting socket invalid move
-  - on close
-    - close sockets
-    - remove pairing
-    - push statistics to database
+### Authentication
+- /signin
+  - Handle user authentication through Azure
+- /signout
+  - Delete the users current session and sign them out
+- /error
+  - Handle login and general server errors that may occur
+- /unauthorized
+  - Deny access to matchmaking if not logged into a UW Mircosoft account
+
+### Users : /users/
+- GET
+  - /
+    - return current user of session
+  - /identity
+    - returns preferred display name and info of logged user
+  - /add
+    - add recently logged user to database and returns to home page
+- POST
+  - /displayname
+    - updates logged users preferred displayname
+  - /setdisplayname
+    - sets preferred name into curren session
+    - used to track in games without database calls
+
+### Leaderboards : /leaderboard/
+- GET
+  - /:user/:game?topN=Integer
+    - returns player stats of a given user for a given game
+  - /:game
+    - sends back top N users of the specified game by total wins
+    - default topN = 10
+- POST
+  - /:game
+    - reports game statistics for logged user
+
+### Websocket
+Commands to websockets are issued in the form of stringified JSON messages of style:
+```
+{
+  action: "action",
+  value: "value"
+}
+```
+- On : __OPEN__
+  - Initializes websocket
+  - Adds websocket to matchmaking queue
+  - Updates matchmaking queue
+    - Relays update info to clients on pairing
+- On : __MESSAGE__
+  - _action_ : 'chat'
+    - send a message to opponent which is displayed in the chatbox
+  - _action_ : 'forfeit'
+    - concede the current game, counting as a loss
+    - both sockets are immediately closed and opponent issued a win
+  - _action_ : 'token'
+    - return the senders assigned token
+  - _action_ : 'makeMove'
+    - attempts a move from the user, rejected if invalid
+    - see above __Workflow__ diagram for logical information
+- On : __CLOSE__
+  - removes current game from server memory
+  - issues notifications to opponent of closure
+  - removes and force closes opponents socket
 
 ## Implementation Strategy
 

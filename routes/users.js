@@ -1,7 +1,7 @@
 import express from 'express';
 var router = express.Router();
 
-/* GET users listing. */
+// GET users listing
 //Get the user that is currently logged in
 router.get('/', function(req, res) {
     let session = req.session;
@@ -18,6 +18,8 @@ router.get('/', function(req, res) {
     }
 });
 
+// GET /users/identity : returns preferred display name and info
+//                        of logged user
 router.get('/identity', async (req, res) => {
   let session = req.session
   if (session.isAuthenticated) {
@@ -39,6 +41,7 @@ router.get('/identity', async (req, res) => {
   }
 })
 
+// POST /users/displayname : updates logged users preferred displayname
 router.post('/displayname', async (req, res) => {
   let session = req.session
   if (session.isAuthenticated) {
@@ -67,6 +70,7 @@ router.post('/displayname', async (req, res) => {
   }
 })
 
+// POST /users/setdisplayname : sets preferred name into current session
 router.post('/setdisplayname', async (req, res) => {
   let session = req.session
   if (session) {
