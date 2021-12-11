@@ -47,10 +47,10 @@ We want to create something that is real time and interactive for our users. As 
   - _(Extra)_ On game completion, game moves will be pushed as an entry on the database and given a match id. This could allow us to implement a replay system.
 
 ## Interaction Architecture
-![interaction architecture](diagrams\Interaction_Architecutre.jpg?raw=true)
+![interaction architecture](diagrams/Interaction_Architecutre.jpg?raw=true)
 
 ## Workflow
-![workflow](diagrams\workflow.jpg?raw=true)
+![workflow](diagrams/workflow.jpg?raw=true)
 
 ## Feature Priorites
 
